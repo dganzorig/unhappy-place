@@ -17,7 +17,17 @@ const AnxietyMap = compose(
       defaultZoom={ props.defaultZoom }
       defaultCenter = { props.defaultCenter }
     >
-        <Circle defaultCenter={ props.defaultCenter } radius={ 35 } options={ mapDefaults.circleOptions } />
+        { 
+            props.events.map(event => {
+                return (
+                    <Circle
+                        defaultCenter={ event.coords }
+                        radius={ 30 * Math.sqrt(event.count) }
+                        options={ mapDefaults.circleOptions }
+                    />
+                );
+            })
+        }
     </GoogleMap>
 )
 

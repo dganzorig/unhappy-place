@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Grid, Button, Typography, Box, AppBar, Tabs, Tab } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Auth0Context } from '../contexts/auth0-context';
-import { mapDefaults } from '../Constants';
 
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
@@ -53,7 +52,7 @@ const AuthenticatedTabs = (props) => {
     }
 
     return (
-        <div classname={classes.root}>
+        <div className={classes.root}>
             <AppBar position="static">
                 <Grid
                     justify="space-between"
@@ -68,7 +67,7 @@ const AuthenticatedTabs = (props) => {
                             textColor="white"
                             variant="scrollable"
                             scrollButtons="auto"
-                            aria-label="scrollable auto tabs example"
+                            aria-label="scrollable auto tabs"
                         >
                             <Tab label="Community" {...a11yProps(0)} />
                             <Tab label="You" {...a11yProps(1)} />
