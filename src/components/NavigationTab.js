@@ -4,7 +4,7 @@ import { AppBar, Toolbar, Grid, Typography, Button } from '@material-ui/core';
 import AuthenticatedTabs from './AuthenticatedTabs';
 
 const NavigationTab = (_) => {
-    const { isLoading, user, loginWithRedirect, logout } = useContext(Auth0Context);
+    const { isLoading, user, loginWithRedirect } = useContext(Auth0Context);
 
     return (
         <>
