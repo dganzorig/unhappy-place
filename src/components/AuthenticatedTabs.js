@@ -1,8 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Button, Typography, Box, AppBar, Tabs, Tab } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Auth0Context } from '../contexts/auth0-context';
+import AnxietyMap from './AnxietyMap';
+import processEvents from '../utils';
+import { mapDefaults } from '../Constants';
 
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
@@ -43,13 +46,29 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const AuthenticatedTabs = (props) => {
-    const { logout } = useContext(Auth0Context);
+    const { user, logout } = useContext(Auth0Context);
     const classes = useStyles();
-    const [ value, setValue ] = React.useState(0);
+    const [ value, setValue ] = useState(0);
+    const [ communityEvents, setCommunityEvents ] = useState([]);
+    const [ personalEvents, setPersonalEvents ] = useState([]);
 
     const handleChange = (_, newValue) => {
         setValue(newValue);
     }
+
+    useEffect(() => {
+        fetch(`/event`)
+          .then(res => res.json())
+          .then(events => setCommunityEvents(events))
+          .catch(err => console.log(err));
+    });
+
+    useEffect(() => {
+        fetch(`/event/${user.sub}`)
+          .then(res => res.json())
+          .then(events => setPersonalEvents(events))
+          .catch(err => console.log(err));
+    });
 
     return (
         <div className={classes.root}>
@@ -85,13 +104,21 @@ const AuthenticatedTabs = (props) => {
                 </Grid>
             </AppBar>
             <TabPanel value={value} index={0}>
-                Item One
+                <AnxietyMap
+                    defaultZoom={ mapDefaults.zoom }
+                    defaultCenter={ mapDefaults.center }
+                    events={ processEvents(communityEvents) }
+                />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                Item Two
+                <AnxietyMap
+                    defaultZoom={ mapDefaults.zoom }
+                    defaultCenter={ mapDefaults.center }
+                    events={ processEvents(personalEvents) }
+                />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                Item Three
+                [To be implemented]
             </TabPanel>
         </div>
     );
